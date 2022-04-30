@@ -48,7 +48,7 @@ public class Hearing extends Thread{
 
     public void run() {
         AudioFileFormat.Type fileType = AudioFileFormat.Type.WAVE;
-        File audioFile = new File("testing.wav");
+        File audioFile = new File("testing.wav"); // TODO: make this point to a resources folder or something
         try {
             logger.info("opening targetDataLine");
             targetDataLine.open(this.audioFormat);
@@ -58,7 +58,6 @@ public class Hearing extends Thread{
                     new AudioInputStream(targetDataLine),
                     fileType,
                     audioFile);
-            logger.info("success?");
         } catch (LineUnavailableException e) {
             logger.error("Line was unavailable");
             e.printStackTrace();
@@ -68,7 +67,7 @@ public class Hearing extends Thread{
         }
 
 
-        logger.info("Successfully wrote to file?");
+        logger.info("Successfully wrote to file");
     }
 
     public void listen() throws LineUnavailableException {
