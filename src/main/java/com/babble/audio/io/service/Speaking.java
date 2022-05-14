@@ -4,6 +4,7 @@ import com.babble.audio.generation.Generation;
 import com.sun.tools.javac.Main;
 import net.beadsproject.beads.core.AudioContext;
 import net.beadsproject.beads.data.Buffer;
+import net.beadsproject.beads.ugens.Envelope;
 import net.beadsproject.beads.ugens.Gain;
 import net.beadsproject.beads.ugens.Glide;
 import net.beadsproject.beads.ugens.WavePlayer;
@@ -26,17 +27,15 @@ public class Speaking {
         audioContext = new AudioContext();
     }
     public void speak(){
-
-        wavePlayer = new WavePlayer(audioContext, 800.0f, Buffer.SINE);
-        WavePlayer wavePlayer1 = new WavePlayer(audioContext, 440.0f, Buffer.SINE);
-        glide = new Glide(audioContext, 0.0f, 10000.0f); // final parameter is how long it will take to get to a new set target volume (value)
-        gain = new Gain(audioContext, 2, glide); // final parameter is the volume
+        wavePlayer = new WavePlayer(audioContext, 440.0f, Buffer.SINE);
+        Envelope envelope = new Envelope(audioContext, 0.0f);
+        gain = new Gain(audioContext, 1, envelope); // final parameter is the volume
         gain.addInput(wavePlayer);
-        gain.addInput(wavePlayer1);
-        glide.setValue(0.5f); // 1.0f hurts my feckin ears (max volume)
         audioContext.out.addInput(gain); // Add player to audio system
         logger.info("will now begin playing sound");
         audioContext.start(); // Sets us up to process audio, do this after adding waveplayers to audioocntext
+        envelope.addSegment(0.9f, 500.0f);
+        envelope.addSegment(0.0f, 500.0f);
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {

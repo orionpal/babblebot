@@ -25,4 +25,8 @@ public class Controller {
         mouth.speak();
         return "hit speak endpoint";
     }
+    @GetMapping("/phoneme")
+    public String test(){
+        return "hit phoneme test";
+    }
 }
